@@ -1,0 +1,4 @@
+.pytest_cache/
+.DS_Store
+.ipynb_checkpoints/
+Untitled.ipynb
