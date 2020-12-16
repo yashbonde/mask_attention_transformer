@@ -1,4 +1,8 @@
 .pytest_cache/
 .DS_Store
 .ipynb_checkpoints/
-Untitled.ipynb
+*.ipynb
+mask_attention/*.so
+build/
+CmakeLists.txt
+
