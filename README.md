@@ -50,18 +50,36 @@ cmake --build . --config Release
 ./attn
 
 >>>
-Hello World
- 0.0808  0.9995  0.6429
- 0.3589  0.3907  0.3606
+Inputs
+ 0.5423  0.9763  0.7522
+ 0.4946  0.7281  0.4401
 [ CPUFloatType{2,3} ]
-0.01 *
--3.5156 -31.0987 -45.9450
- -57.0751 -80.1256 -63.1462
+-0.8206 -0.5334 -0.1927
+-0.4966 -0.5969 -0.9106
 [ CPUFloatType{2,3} ]
--0.6091
--0.7456
+output:
+-1.1108
+-1.0810
 [ CPUFloatType{2} ]
+```
 
+To build dylib file run the command:
+```
+cd csrc/
+mkdir build; cd build;
+cmake -DCMAKE_PREFIX_PATH=/usr/local/lib/python3.9/site-packages/torch/share/cmake .. && make -j
+python3 test.py
+
+>>>
+<built-in method dot_prod of PyCapsule object at 0x1023cae40>
+Inputs
+-1.3643  1.5106 -2.6652
+-0.4383 -0.1192  2.7443
+[ CPUFloatType{2,3} ]
+-0.3753 -0.5521 -2.0461
+-0.0443 -0.7246 -0.3306
+[ CPUFloatType{2,3} ]
+---> tensor([ 5.1314, -0.8015])
 ```
 
 <!-- ### Tests -->

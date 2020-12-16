@@ -15,10 +15,7 @@ torch::Tensor dot_prod(torch::Tensor t1, torch::Tensor t2) {
     return out;
 }
 
-// main function
-int main (){
-    torch::Tensor t1 = torch::rand({2, 3});
-    torch::Tensor t2 = -torch::rand({2, 3});
-    torch::Tensor out = dot_prod(t1, t2);
-    std::cout << "output:\n" << out << std::endl;
+// register
+TORCH_LIBRARY(my_ops, m) {
+  m.def("dot_prod", dot_prod);
 }

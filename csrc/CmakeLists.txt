@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+project(torch_mask_attention)
+
+find_package(Torch REQUIRED)
+
+# file(GLOB HEADERS csrc/mask_attention.h)
+# file(GLOB OPERATOR_SOURCES csrc/*.cpp)
+
+# add_library(${PROJECT_NAME} SHARED ${OPERATOR_SOURCES})
+# target_link_libraries(${PROJECT_NAME} PRIVATE ${TORCH_LIBRARIES} Python3::Python)
+# set_target_properties(${PROJECT_NAME} PROPERTIES EXPORT_NAME TorchMaskAttention)
+
+# target_include_directories(${PROJECT_NAME} INTERFACE
+#   $<BUILD_INTERFACE:${HEADERS}>
+#   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+# include(GNUInstallDirs)
+# include(CMakePackageConfigHelpers)
+
+
+# set(TORCHMASKATTENTION_CMAKECONFIG_INSTALL_DIR "share/cmake/TorchMaskAttention"
+#   CACHE STRING "install path for TorchMaskAttention.cmake")
+
+# write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/TorchMaskAttentionConfigVersion.cmake
+#   VERSION ${TORCHMASKATTENTION_VERSION}
+#   COMPATIBILITY AnyNewerVersion)
+
+# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TorchScatterConfig.cmake
+#   ${CMAKE_CURRENT_BINARY_DIR}/TorchScatterConfigVersion.cmake
+#   DESTINATION ${TORCHSCATTER_CMAKECONFIG_INSTALL_DIR})
+
+# Define our library target
+add_library(torch_mask_attention SHARED mask_attention.cpp)
+
+# Enable C++14
+target_compile_features(torch_mask_attention PRIVATE cxx_std_14)
+
+# Link against LibTorch
+target_link_libraries(torch_mask_attention "${TORCH_LIBRARIES}")

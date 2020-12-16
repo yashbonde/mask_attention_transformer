@@ -4,5 +4,10 @@
 *.ipynb
 mask_attention/*.so
 build/
-CmakeLists.txt
 
+# should include build lists
+# CmakeLists.txt
+
+__pycache__/
+mask_attention.egg-info
+.eggs/
