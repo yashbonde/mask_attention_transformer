@@ -18,5 +18,5 @@ print(mo.dot_prod)
 t1 = torch.randn(2, 3)
 t2 = torch.randn(2, 3)
 
-out = mo.dot_prod(t1, t2)
+out = mo.dot_prod(t1, t2, True)
 print("--->", out)

@@ -1,4 +1,7 @@
-from mask_attention import attention as att
+import torch
+import mask_attention as ma
 
-def test_full():
-    pass
+print(ma.dot_prod)
+out = ma.dot_prod(torch.randn(2, 3), torch.randn(2, 3))
+print("out", out)
+

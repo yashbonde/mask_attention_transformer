@@ -2,12 +2,9 @@
 .DS_Store
 .ipynb_checkpoints/
 *.ipynb
-mask_attention/*.so
 build/
-
-# should include build lists
-# CmakeLists.txt
-
 __pycache__/
-mask_attention.egg-info
+*.egg-info
+.eggs/
+.vscode/
 .eggs/

@@ -1,8 +1,10 @@
 #include <iostream>
 #include <torch/torch.h>
 
-torch::Tensor dot_prod(torch::Tensor t1, torch::Tensor t2) {
-    std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
+torch::Tensor dot_prod(torch::Tensor t1, torch::Tensor t2, bool verbose = false) {
+    if (verbose == true) {
+        std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
+    }
     torch::Tensor out = torch::zeros({t1.size(0)});
     for (int i = 0; i < t1.size(0); i++) {
         float_t temp = 0;

@@ -41,47 +41,32 @@ python3 -c "import torch;print(torch.utils.cmake_prefix_path)"
 # /usr/local/lib/python3.9/site-packages/torch/share/cmake
 ```
 
-For practice goto `libtorch_example/` and run the following commands:
+There are two steps to get the code working:
+1. Clone repo:
 ```
-mkdir build; cd build;
-# where PATH_TO_LIBTORCH comes from above
-cmake -DCMAKE_PREFIX_PATH=$PATH_TO_LIBTORCH ..
-cmake --build . --config Release
-./attn
-
->>>
-Inputs
- 0.5423  0.9763  0.7522
- 0.4946  0.7281  0.4401
-[ CPUFloatType{2,3} ]
--0.8206 -0.5334 -0.1927
--0.4966 -0.5969 -0.9106
-[ CPUFloatType{2,3} ]
-output:
--1.1108
--1.0810
-[ CPUFloatType{2} ]
-```
-
-To build dylib file run the command:
-```
+git clone https://github.com/yashbonde/mask_attention_transformer.git
 cd csrc/
 mkdir build; cd build;
 cmake -DCMAKE_PREFIX_PATH=/usr/local/lib/python3.9/site-packages/torch/share/cmake .. && make -j
 python3 test.py
 
->>>
-<built-in method dot_prod of PyCapsule object at 0x1023cae40>
+# if everything works you should get an output like
+<built-in method dot_prod of PyCapsule object at 0x107008e40>
 Inputs
--1.3643  1.5106 -2.6652
--0.4383 -0.1192  2.7443
+ 0.7300 -0.9675 -1.1057
+ 0.1083  0.5945  0.5429
 [ CPUFloatType{2,3} ]
--0.3753 -0.5521 -2.0461
--0.0443 -0.7246 -0.3306
+-2.2314  0.5905 -1.0162
+ 0.7856  0.2872  0.2024
 [ CPUFloatType{2,3} ]
----> tensor([ 5.1314, -0.8015])
+---> tensor([-1.0767,  0.3657])
 ```
 
+2. The above code will build the linked library. The next step is super straight forward, use `pip` to install this package:
+```
+pip3 install -e . #mask_attention
+python3 test_attn.py # for testing
+```
 <!-- ### Tests -->
 
 <!-- To run the tests please install `pytest` and run in CLI `pytest`. -->

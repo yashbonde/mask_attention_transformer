@@ -23,13 +23,44 @@ SOFTWARE.
 """
 
 import torch
-import importlib
+import platform
 import os.path as osp
 
-for library in ['_attention']:
-    torch.ops.load_library(importlib.machinery.PathFinder().find_spec(library, [osp.dirname(__file__)]).origin)
+path_to_dynamic_lib = osp.join(
+    osp.dirname(osp.dirname(__file__)), # to repo level
+    "csrc",
+    "build",
+    "libtorch_mask_attention"
+)
+if platform.system() == "Darwin":
+    # macos uses *.dylib
+    path_to_dynamic_lib = path_to_dynamic_lib + ".dylib"
+    if not osp.exists(path_to_dynamic_lib):
+        raise ImportError(f"dylib file not found at path: {path_to_dynamic_lib} please build from README")
+    torch.ops.load_library(path_to_dynamic_lib)
+    mo = torch.ops.my_ops
+elif platform.system() == "Linux":
+    # linux platform uses *.so as dylib
+    path_to_dynamic_lib = path_to_dynamic_lib + ".so"
+    if not osp.exists(path_to_dynamic_lib):
+        raise ImportError(f"so file not found at path: {path_to_dynamic_lib} please build from README")
+    torch.ops.load_library(path_to_dynamic_lib)
+    mo = torch.ops.my_ops
+else:
+    print("Only MacOS is supported")
+    exit()
 
-from .attention import prod
+# definations
+def dot_prod(t1: torch.Tensor, t2: torch.Tensor, verbose: bool = False):
+    """simple function with fully built doc string and wrapper for Cpp-object
+    :param t1: tensor 1
+    :param t2: tensor 2
+    :param verbose: bool whether to allow C++ code to print
+    """
+    assert t1.size() == t2.size(), "Sizes for dot-product must match"
+    return mo.dot_prod(t1, t2, verbose)
+
+# __all__
 __all__ = [
-    "prod"
+    "dot_prod",
 ]
