@@ -33,40 +33,62 @@ Our inspiration is [`pytorch_geometric`](https://github.com/rusty1s/pytorch_scat
 
 ### Installation
 
-Before running the code ensure that you have `pytorch` installed as you will be using path from there. Though you can run directly from `libtorch` (C++ bindings of `pytorch`) our aim is to use this in python.
-
-To get the path to libtorch cmake on your system run:
-```
-python3 -c "import torch;print(torch.utils.cmake_prefix_path)"
-# /usr/local/lib/python3.9/site-packages/torch/share/cmake
-```
-
-There are two steps to get the code working:
-1. Clone repo:
+Before running the code ensure that you have `pytorch` installed as you will be using path from there. Though you can run directly from `libtorch` (C++ bindings of `pytorch`) our aim is to use this in python. To install run the following commands:
 ```
 git clone https://github.com/yashbonde/mask_attention_transformer.git
-cd csrc/
-mkdir build; cd build;
-cmake -DCMAKE_PREFIX_PATH=/usr/local/lib/python3.9/site-packages/torch/share/cmake .. && make -j
-python3 test.py
+cd mask_attention_transformer && chmod +x compile.sh
+./compile.sh
+```
 
-# if everything works you should get an output like
-<built-in method dot_prod of PyCapsule object at 0x107008e40>
+If everything works correctly you should see something like this:
+```
+:: Found path to pytorch Cmake file --> /usr/local/lib/python3.9/site-packages/torch/share/cmake
+-- The C compiler identification is AppleClang 12.0.0.12000031
+-- The CXX compiler identification is AppleClang 12.0.0.12000031
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found Torch: /usr/local/lib/python3.9/site-packages/torch/lib/libtorch.dylib  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/yashbonde/Desktop/AI/fun/mask_attention_transformer/csrc/build
+Scanning dependencies of target torch_mask_attention
+[ 50%] Building CXX object CMakeFiles/torch_mask_attention.dir/mask_attention.cpp.o
+[100%] Linking CXX shared library libtorch_mask_attention.dylib
+[100%] Built target torch_mask_attention
+:: Starting Test Runs (Library) ...
+<built-in method dot_prod of PyCapsule object at 0x10860de40>
 Inputs
- 0.7300 -0.9675 -1.1057
- 0.1083  0.5945  0.5429
+-0.9181 -1.2182  0.1413
+-0.0464 -0.0939 -1.5106
 [ CPUFloatType{2,3} ]
--2.2314  0.5905 -1.0162
- 0.7856  0.2872  0.2024
+ 0.6372 -1.0086 -0.8513
+-0.3029 -0.6439 -1.3351
 [ CPUFloatType{2,3} ]
----> tensor([-1.0767,  0.3657])
+---> tensor([0.5233, 2.0913])
+:: Installing Python Version
+Obtaining file:///Users/yashbonde/Desktop/AI/fun/mask_attention_transformer
+Installing collected packages: mask-attention
+  Attempting uninstall: mask-attention
+    Found existing installation: mask-attention 0.0.1
+    Uninstalling mask-attention-0.0.1:
+      Successfully uninstalled mask-attention-0.0.1
+  Running setup.py develop for mask-attention
+Successfully installed mask-attention
+:: Starting Test Runs (Python) ...
+<function dot_prod at 0x122e4d670>
+out tensor([1.3461, 2.5791])
+:: ... Complete
 ```
-
-2. The above code will build the linked library. The next step is super straight forward, use `pip` to install this package:
-```
-pip3 install -e . #mask_attention
-python3 test_attn.py # for testing
-```
-<!-- ### Tests -->
-
-<!-- To run the tests please install `pytest` and run in CLI `pytest`. -->
