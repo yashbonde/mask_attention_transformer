@@ -32,6 +32,20 @@ w = att.mask_attn(tensor1 = q, tensor2 = k, mask_to_attend_to = m == 0, fill = -
 
 Our inspiration is [`pytorch_geometric`](https://github.com/rusty1s/pytorch_scatter/tree/master) and our aim is to make it even more simpler while writing good tests.
 
+### TODO
+
+- fix segfault in `libtorch_example/attn.cpp`, this is important because then we will understand the `AT_DISPATCH_ALL_TYPES` used in pytorch.
+  - study more about `AT_DISPATCH_ALL_TYPES`, is that really needed, can we bypass it?
+- Reverse engineer `pytorch/aten` module and see what the exact `gemm` op to call. Though we now know that `EIGEN/LAPACK` is called still is it possible to keep things in `aten` as much as possible.
+  - [HARD CALL = 5] if in 5 attempts we cannot figure out a way to use `aten` we switch to directly calling `EIGEN`, though we will then need to write the wrappers for conversion to `torch::Tensor`.
+- Write a code to run the finalised `gemm_op` in `libtorch_example` so we can verify code in C++, easy to port to python then.
+- Optimise the code such that it is as fast as `huggingface/transformers`.
+  - `transformers` is written purely in `pytorch` no C++ bindings. We should match their speed, only then do we have a fighting chance.
+- Write a wrapper for calling on CPU and CUDA (later) but we should have the wrapper like `pytorch` does.
+  - This will require studying `Cmake`, hack takes priority over proper software dev.
+- Add CUDA support, this should not be too difficult giving simpler structure. We will need to s
+- **SHOW FINGER** to all those who are not open sourcing their work but merely giving binaries.
+
 ### Installation
 
 Before running the code ensure that you have `pytorch` installed as you will be using path from there. Though you can run directly from `libtorch` (C++ bindings of `pytorch`) our aim is to use this in python. To install run the following commands:

@@ -83,7 +83,9 @@ torch::Tensor scatter_sum_simple(
           i = b*E*K + e*K + k;
           idx = index_info.data[IndexToOffset<int64_t>::get(i, index_info)];
           auto *val = out_data + b*N*K + idx*K + k;
+          std::cout << *val << "\n";
           *val = *val + src_data[i];
+          std::cout << "-- " << *val << "\n";
         }
       }
     }
