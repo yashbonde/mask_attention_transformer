@@ -2,10 +2,11 @@
 
 Simple attention APIs for masked attention in transformers.
 
-This package is aimed at making different attention patterns used in transformers easy to use. For eg. if you want to perform attention on only the 10% of all the tokens, then removing the compute for 90% improves speed and reduces memory complexity. Consider the sparse attention used by GPT3, or the one used by BigBIRD:
+This package is aimed at making different attention patterns used in transformers easy to use. For eg. if you want to perform attention on only the 10% of all the tokens, then removing the compute for 90% improves speed and reduces memory complexity. Consider the sparse attention used by GPT3, or the one used by BigBIRD and another from Longformer:
 
 <img src="https://lilianweng.github.io/lil-log/assets/images/sparse-attention.png" height=300px>
 <img src="https://miro.medium.com/max/430/0*J32UHaxXZ782KGLo.png" height=200px>
+<img src="https://miro.medium.com/max/6216/1*Z_GLLlF0cdhh_xATWscxlw.png" height=200px>
 
 Currently you need to write your own CUDA kernels or use code from [longformer](https://github.com/allenai/longformer), which does something similar. However in all the cases it is very difficult to use this and also none provides any speed up on CPUs. With this simple package we aim to solve this problem.
 
