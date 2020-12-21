@@ -35,6 +35,33 @@ torch::Tensor brute_force(torch::Tensor t1, torch::Tensor t2) {
   return out;
 }
 
+torch::Tensor brute_force_with_fill(
+  torch::Tensor t1, torch::Tensor t2, torch::Tensor mask, float64_t fill
+) {
+  /* This is the brute force matrix multiplication 
+
+  t1 --> [5, 10]
+  t2 --> [5, 10]
+  matmul(t1, t2) --> [5, 5]
+
+  mask -> [5, 5]
+  fill -> float
+  */
+  // std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
+  torch::Tensor out = torch::zeros({t1.size(0) , t2.size(0)});
+  // std::cout << t1.size(0) << t1.size(1) << t2.size(0) << t2.size(1);
+  for (int i = 0; i < t1.size(0); i++) { // row
+    for (int j = 0; j < t2.size(0); j++){  //
+      float_t res = 0;
+      for (int k = 0; k < t2.size(1); k++) {
+        res += (t1[i][k] * t2[j][k]).item<float>();
+      }
+      out[i][j] = res;
+    }
+  }
+  return out;
+}
+
 // my implementation of scatter add
 torch::Tensor scatter_sum_simple(
   torch::Tensor src, torch::Tensor index, int64_t dim
@@ -114,6 +141,20 @@ int main (){
   torch::Tensor out = scatter_sum_simple(src, index, -1);
 
   std::cout << "\n" << out << std::endl;
+
+  // brute_force_with_fill
+  torch::Tensor t1 = torch::rand({5, 10});
+  torch::Tensor t2 = torch::rand({5, 10});
+  torch::Tensor mask = torch::tensor({
+    {1, 0, 0, 0, 0},
+    {1, 1, 0, 0, 0},
+    {1, 1, 1, 0, 0},
+    {1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1},
+  })
+
+  torch::Tensor out = brute_force_with_fill(t1, t2, mask, -10000.);
+  std::cout << out;
 
   // output should be
   // tensor([[0., 0., 4., 3., 3.],
