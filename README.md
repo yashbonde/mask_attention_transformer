@@ -2,6 +2,8 @@
 
 Simple attention APIs for masked attention in transformers.
 
+To understand more about this read [primer.md](primer.md).
+
 This package is aimed at making different attention patterns used in transformers easy to use. For eg. if you want to perform attention on only the 10% of all the tokens, then removing the compute for 90% improves speed and reduces memory complexity. Consider the sparse attention used by GPT3, or the one used by BigBIRD and another from Longformer:
 
 <img src="https://lilianweng.github.io/lil-log/assets/images/sparse-attention.png" height=300px>

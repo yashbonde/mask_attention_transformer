@@ -10,7 +10,7 @@ elif platform.system() == "Linux":
     torch.ops.load_library("build/libtorch_mask_attention.so")
     mo = torch.ops.my_ops
 else:
-    print("Only MacOS is supported")
+    print("Only MacOS/Linux is supported")
     exit()
 
 print(mo.dot_prod)
