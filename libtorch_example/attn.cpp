@@ -4,6 +4,7 @@
 
 #include "index_info.h" // helper methods
 
+// simple dot product, uses brute force method
 torch::Tensor dot_prod(torch::Tensor t1, torch::Tensor t2) {
   std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
   torch::Tensor out = torch::zeros({t1.size(0)});
@@ -18,7 +19,7 @@ torch::Tensor dot_prod(torch::Tensor t1, torch::Tensor t2) {
   return out;
 }
 
-
+// this is the brute force method for matrix multiplication o(n3)
 torch::Tensor brute_force(torch::Tensor t1, torch::Tensor t2) {
   // std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
   torch::Tensor out = torch::zeros({t1.size(0) , t2.size(0)});
@@ -35,34 +36,8 @@ torch::Tensor brute_force(torch::Tensor t1, torch::Tensor t2) {
   return out;
 }
 
-torch::Tensor brute_force_with_fill(
-  torch::Tensor t1, torch::Tensor t2, torch::Tensor mask, float64_t fill
-) {
-  /* This is the brute force matrix multiplication 
 
-  t1 --> [5, 10]
-  t2 --> [5, 10]
-  matmul(t1, t2) --> [5, 5]
-
-  mask -> [5, 5]
-  fill -> float
-  */
-  // std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
-  torch::Tensor out = torch::zeros({t1.size(0) , t2.size(0)});
-  // std::cout << t1.size(0) << t1.size(1) << t2.size(0) << t2.size(1);
-  for (int i = 0; i < t1.size(0); i++) { // row
-    for (int j = 0; j < t2.size(0); j++){  //
-      float_t res = 0;
-      for (int k = 0; k < t2.size(1); k++) {
-        res += (t1[i][k] * t2[j][k]).item<float>();
-      }
-      out[i][j] = res;
-    }
-  }
-  return out;
-}
-
-// my implementation of scatter add
+// my implementation of scatter add from https://github.com/rusty1s/pytorch_scatter
 torch::Tensor scatter_sum_simple(
   torch::Tensor src, torch::Tensor index, int64_t dim
 ) {
@@ -81,14 +56,6 @@ torch::Tensor scatter_sum_simple(
   auto N = out.size(dim);
   // B,E,K,N = 1 5 2 5
   auto index_info = getTensorInfo<int64_t>(index);
-
-  // The AT_DISPATCH_* family of macros provides the ability to
-  // conveniently generate specializations of a kernel over all of the
-  // dtypes we care about in PyTorch.  We call it "dispatch" because
-  // we are "dispatching" to the correct, dtype-specific kernel.
-  // read more at:
-  // https://github.com/pytorch/pytorch/blob/master/aten/src/ATen/Dispatch.h
-  AT_DISPATCH_ALL_TYPES(src.scalar_type(), "scatter", [&] {
     // AT_DISPATCH_REDUCTION_TYPES // this basically converts string to type
 
     auto src_data = src.data_ptr<scalar_t>();
@@ -119,6 +86,43 @@ torch::Tensor scatter_sum_simple(
   return out;
 }
 
+// matrix multiplication using CPU BLAS
+torch::Tensor brute_force_with_fill(
+  torch::Tensor t1, torch::Tensor t2, torch::Tensor mask, float_t fill
+) {
+  /* This is the brute force matrix multiplication 
+
+  t1 --> [5, 10]
+  t2 --> [5, 10]
+  matmul(t1, t2) --> [5, 5]
+
+  mask -> [5, 5]
+  fill -> float
+  */
+  // std::cout << "Inputs\n" << t1 << "\n" << t2 << std::endl;
+  torch::Tensor out = torch::zeros({t1.size(0) , t2.size(0)});
+  // std::cout << t1.size(0) << t1.size(1) << t2.size(0) << t2.size(1);
+  for (int i = 0; i < t1.size(0); i++) { // row
+    for (int j = 0; j < t2.size(0); j++){  //
+      float_t res = 0;
+      for (int k = 0; k < t2.size(1); k++) {
+        res += (t1[i][k] * t2[j][k]).item<float>();
+      }
+      out[i][j] = res;
+    }
+  }
+  return out;
+}
+
+
+  // The AT_DISPATCH_* family of macros provides the ability to
+  // conveniently generate specializations of a kernel over all of the
+  // dtypes we care about in PyTorch.  We call it "dispatch" because
+  // we are "dispatching" to the correct, dtype-specific kernel.
+  // read more at:
+  // https://github.com/pytorch/pytorch/blob/master/aten/src/ATen/Dispatch.h
+  AT_DISPATCH_ALL_TYPES(src.scalar_type(), "scatter", [&] {
+
 // main function
 int main (){
   // torch::Tensor t1 = torch::rand({2, 3});
@@ -142,19 +146,19 @@ int main (){
 
   std::cout << "\n" << out << std::endl;
 
-  // brute_force_with_fill
-  torch::Tensor t1 = torch::rand({5, 10});
-  torch::Tensor t2 = torch::rand({5, 10});
-  torch::Tensor mask = torch::tensor({
-    {1, 0, 0, 0, 0},
-    {1, 1, 0, 0, 0},
-    {1, 1, 1, 0, 0},
-    {1, 1, 1, 1, 0},
-    {1, 1, 1, 1, 1},
-  })
+  // // brute_force_with_fill
+  // torch::Tensor t1 = torch::rand({5, 10});
+  // torch::Tensor t2 = torch::rand({5, 10});
+  // torch::Tensor mask = torch::tensor({
+  //   {1, 0, 0, 0, 0},
+  //   {1, 1, 0, 0, 0},
+  //   {1, 1, 1, 0, 0},
+  //   {1, 1, 1, 1, 0},
+  //   {1, 1, 1, 1, 1},
+  // })
 
-  torch::Tensor out = brute_force_with_fill(t1, t2, mask, -10000.);
-  std::cout << out;
+  // torch::Tensor out = brute_force_with_fill(t1, t2, mask, -10000.);
+  // std::cout << out;
 
   // output should be
   // tensor([[0., 0., 4., 3., 3.],
