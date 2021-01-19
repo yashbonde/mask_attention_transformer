@@ -162,8 +162,6 @@ Now as I mentioned we can pre fetch the values that are to be operated on, and t
 +--+--+--+--+--+
 |c1|c2|c3|c4|c5|
 +--+--+--+--+--+
-|d1|d2|d3|d4|d5|
-+--+--+--+--+--+
 
 (Patch Matrix of 3x3)    (Stride 1 patch matrix)
 +--+--+--+--+--+--+--+        +--+--+--+--+
