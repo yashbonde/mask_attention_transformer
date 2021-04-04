@@ -9,6 +9,7 @@ This package is aimed at making different attention patterns used in transformer
 <img src="https://lilianweng.github.io/lil-log/assets/images/sparse-attention.png" height=300px>
 <img src="https://miro.medium.com/max/430/0*J32UHaxXZ782KGLo.png" height=200px>
 <img src="https://miro.medium.com/max/6216/1*Z_GLLlF0cdhh_xATWscxlw.png" height=200px>
+<img src="./assets/swin.png" height=200px>
 
 Currently you need to write your own CUDA kernels or use code from [longformer](https://github.com/allenai/longformer), which does something similar. However in all the cases it is very difficult to use this and also none provides any speed up on CPUs. With this simple package we aim to solve this problem.
 
@@ -45,7 +46,7 @@ Our inspiration is [`pytorch_geometric`](https://github.com/rusty1s/pytorch_scat
   - `transformers` is written purely in `pytorch` no C++ bindings. We should match their speed, only then do we have a fighting chance.
 - Write a wrapper for calling on CPU and CUDA (later) but we should have the wrapper like `pytorch` does.
   - This will require studying `Cmake`, hack takes priority over proper software dev.
-- Add CUDA support, this should not be too difficult giving simpler structure. We will need to s
+- Add CUDA support, this should not be too difficult giving simpler structure.
 - **SHOW FINGER** to all those who are not open sourcing their work but merely giving binaries.
 
 ### Installation

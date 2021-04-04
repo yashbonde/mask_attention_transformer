@@ -11,6 +11,11 @@ GEMM stands for GEnerak Matrix Multiplication, but more on that later. This docu
 8. stackoverflow [answer](https://stackoverflow.com/questions/61945276/how-does-the-dimention-argument-of-sgemm-work)
 9. How to optimize GEMM [wiki](https://github.com/flame/how-to-optimize-gemm/wiki), [video](https://www.youtube.com/watch?v=cKkF690TuG8)
 
+#### Papers
+
+1. Swin Transformer [paper](https://arxiv.org/pdf/2103.14030.pdf)
+2. Vision Transformers for Dense Prediction [paper](https://arxiv.org/pdf/2103.13413.pdf)
+
 ## BLAS
 
 Basic Linear Algebra System (BLAS) is a specification that describes low level routines for performing commong linear algebra operations such as vector additions, scalar multiplications, dot products, linear combination and matrix multiplications.
